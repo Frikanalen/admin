@@ -3,7 +3,7 @@
 import { KubeConfig, CoreV1Api } from "@kubernetes/client-node";
 import { db } from "./lib/knex";
 import { format, endOfWeek, startOfDay, startOfWeek } from "date-fns";
-import { nb } from "date-fns/locale";
+import { locale } from "./lib/date-fn-locale";
 
 async function getPodsInfo() {
   try {
@@ -77,9 +77,7 @@ const groupByStartOfDay = (
 ): Record<string, ScheduleEntry[]> =>
   scheduleEntries.reduce((acc: Record<string, ScheduleEntry[]>, entry) => {
     // Get the start of the day timestamp
-    const date = format(startOfDay(entry.startsAt), "PP", {
-      locale: nb,
-    });
+    const date = format(startOfDay(entry.startsAt), "PP", { locale });
 
     // If the timestamp is not yet a key in the accumulator, add it with an empty array
     if (!acc[date]) acc[date] = [];
